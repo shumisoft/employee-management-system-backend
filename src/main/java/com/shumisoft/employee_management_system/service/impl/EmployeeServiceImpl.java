@@ -54,8 +54,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee entity = findEmployeeByIdOrThrowException(id);
 
-        System.out.println(dto.getFirstName() + dto.getLastName());
-
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setEmail(dto.getEmail());
@@ -63,9 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         entity.setJoinDate(dto.getJoinDate());
         entity.setStatus(dto.getStatus());
 
-        Employee updated = repository.save(entity);
-
-        return EmployeeResponseDTO.fromEntity(updated);
+        return EmployeeResponseDTO.fromEntity(repository.save(entity));
 
     }
 
