@@ -64,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         Department entity = findDepartmentByIdOrThrowException(id);
 
-        if (dto.getName() == null && dto.getDescription() == null) {
+        if (dto.isEmpty()) {
 
             throw new IllegalArgumentException("At least one field must be provided for update.");
 

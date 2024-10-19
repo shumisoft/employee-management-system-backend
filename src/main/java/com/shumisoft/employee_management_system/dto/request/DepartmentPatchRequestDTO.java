@@ -4,6 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class DepartmentPatchRequestDTO {
+
     private String name;
     private String description;
+
+    public boolean isEmpty() {
+
+        return name == null && description == null;
+
+    }
 }
