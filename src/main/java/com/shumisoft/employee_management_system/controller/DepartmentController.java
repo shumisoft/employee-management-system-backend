@@ -20,6 +20,7 @@ import com.shumisoft.employee_management_system.dto.request.DepartmentRequestDTO
 import com.shumisoft.employee_management_system.dto.response.DepartmentResponseDTO;
 import com.shumisoft.employee_management_system.service.impl.DepartmentServiceImpl;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -31,7 +32,7 @@ public class DepartmentController {
     private final DepartmentServiceImpl service;
 
     @PostMapping
-    public ResponseEntity<DepartmentResponseDTO> createDepartment(@RequestBody DepartmentRequestDTO dto) {
+    public ResponseEntity<DepartmentResponseDTO> createDepartment(@RequestBody @Valid DepartmentRequestDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createDepartment(dto));
 
@@ -54,7 +55,7 @@ public class DepartmentController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<DepartmentResponseDTO> updateDepartmentById(@PathVariable Integer id,
+    public ResponseEntity<DepartmentResponseDTO> updateDepartmentById(@PathVariable @Valid Integer id,
             @RequestBody DepartmentRequestDTO dto) {
 
         return ResponseEntity.ok(service.updateDepartmentById(id, dto));
