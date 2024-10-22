@@ -18,7 +18,7 @@ public interface EmployeeService {
 
     public EmployeeResponseDTO updateEmployeeById(UUID id, EmployeeRequestDTO dto);
 
-    public EmployeeResponseDTO patchEmployeeById(UUID Id, EmployeePatchRequestDTO dto);
+    public EmployeeResponseDTO patchEmployeeById(UUID id, EmployeePatchRequestDTO dto);
 
     public void deleteEmployeeById(UUID id);
 
