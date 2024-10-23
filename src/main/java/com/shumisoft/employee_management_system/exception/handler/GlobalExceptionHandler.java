@@ -74,9 +74,9 @@ public class GlobalExceptionHandler {
 
     }
 
-    // @ExceptionHandler(Exception.class)
-    // public ResponseEntity<ErrorMessageDTO> defaultHandler(Exception e) {
-    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    // .body(ErrorMessageDTO.builder().message(e.getMessage()).build());
-    // }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessageDTO> defaultHandler(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorMessageDTO.builder().message(e.getMessage()).build());
+    }
 }
