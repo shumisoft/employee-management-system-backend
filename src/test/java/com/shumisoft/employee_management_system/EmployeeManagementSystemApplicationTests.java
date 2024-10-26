@@ -8,6 +8,7 @@ class EmployeeManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Will add tests soon
 	}
 
 }
