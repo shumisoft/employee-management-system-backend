@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import com.shumisoft.employee_management_system.dto.request.EmployeePatchRequestDTO;
 import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
+import com.shumisoft.employee_management_system.entity.Department;
 import com.shumisoft.employee_management_system.entity.Employee;
+import com.shumisoft.employee_management_system.repository.DepartmentRepository;
 import com.shumisoft.employee_management_system.repository.EmployeeRepository;
 import com.shumisoft.employee_management_system.service.EmployeeService;
 
@@ -20,37 +23,56 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository repository;
+    private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
     private Employee findEmployeeByIdOrThrowException(UUID id) {
 
-        return repository.findById(id)
+        return employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id: " + id));
 
     }
 
-    @Override
-    public EmployeeResponseDTO createEmployee(EmployeeRequestDTO dto) {
+    private Department findDepartmentByIdOrThrowException(Integer id) {
 
-        return EmployeeResponseDTO.fromEntity(repository.save(dto.toEntity()));
+        return departmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + id));
+    }
+
+    @Override
+    public EmployeeResponseWithDepartmentDTO createEmployee(EmployeeRequestDTO dto) {
+
+        Employee entity = dto.toEntity();
+
+        entity.setDepartment(findDepartmentByIdOrThrowException(dto.getDepartment()));
+
+        return EmployeeResponseWithDepartmentDTO.fromEntity(employeeRepository.save(entity));
     }
 
     @Override
     public Page<EmployeeResponseDTO> getAllEmployees(Integer page, Integer pageSize) {
 
-        return repository.findAll(PageRequest.of(page, pageSize)).map(EmployeeResponseDTO::fromEntity);
+        return employeeRepository.findAll(PageRequest.of(page, pageSize)).map(EmployeeResponseDTO::fromEntity);
+
+    }
+
+    public Page<EmployeeResponseDTO> getEmployeesByDepartmentId(Integer departmentId, Integer page,
+            Integer pageSize) {
+
+        return employeeRepository.findByDepartmentId(departmentId, PageRequest.of(page, pageSize))
+                .map(EmployeeResponseDTO::fromEntity);
 
     }
 
     @Override
-    public EmployeeResponseDTO getEmployeeById(UUID id) {
+    public EmployeeResponseWithDepartmentDTO getEmployeeById(UUID id) {
 
-        return EmployeeResponseDTO.fromEntity(findEmployeeByIdOrThrowException(id));
+        return EmployeeResponseWithDepartmentDTO.fromEntity(findEmployeeByIdOrThrowException(id));
 
     }
 
     @Override
-    public EmployeeResponseDTO updateEmployeeById(UUID id, EmployeeRequestDTO dto) {
+    public EmployeeResponseWithDepartmentDTO updateEmployeeById(UUID id, EmployeeRequestDTO dto) {
 
         Employee entity = findEmployeeByIdOrThrowException(id);
 
@@ -60,13 +82,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         entity.setPhone(dto.getPhone());
         entity.setJoinDate(dto.getJoinDate());
         entity.setStatus(dto.getStatus());
+        entity.setDepartment(findDepartmentByIdOrThrowException(dto.getDepartment()));
 
-        return EmployeeResponseDTO.fromEntity(repository.save(entity));
+        return EmployeeResponseWithDepartmentDTO.fromEntity(employeeRepository.save(entity));
 
     }
 
     @Override
-    public EmployeeResponseDTO patchEmployeeById(UUID id, EmployeePatchRequestDTO dto) {
+    public EmployeeResponseWithDepartmentDTO patchEmployeeById(UUID id, EmployeePatchRequestDTO dto) {
 
         Employee entity = findEmployeeByIdOrThrowException(id);
 
@@ -112,13 +135,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         }
 
-        return EmployeeResponseDTO.fromEntity(entity);
+        if (dto.getDepartment() != null) {
+
+            entity.setDepartment(findDepartmentByIdOrThrowException(dto.getDepartment()));
+
+        }
+
+        return EmployeeResponseWithDepartmentDTO.fromEntity(employeeRepository.save(entity));
     }
 
     @Override
     public void deleteEmployeeById(UUID id) {
 
-        repository.delete(findEmployeeByIdOrThrowException(id));
+        employeeRepository.delete(findEmployeeByIdOrThrowException(id));
 
     }
 }
