@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,5 +39,13 @@ public class Employee {
         ACTIVE,
         INACTIVE
     }
+
+    @ManyToOne
+    /**
+     * default column name will be departmet + Department enttity pk
+     * 
+     * @JoinColumn(name = "emp_department_id") //custom column name
+     */
+    private Department department;
 
 }
