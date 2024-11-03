@@ -25,6 +25,12 @@ public class EmployeeRequestDTO {
     private LocalDate joinDate;
     private Employee.Status status;
 
+    /**
+     * Department of the employee. It corresponds to the Department entity, and is
+     * represented by the department ID.
+     */
+    private Integer department;
+
     public Employee toEntity() {
 
         return Employee.builder().firstName(firstName).lastName(lastName).email(email).phone(phone).joinDate(joinDate)
