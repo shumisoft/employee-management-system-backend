@@ -15,15 +15,12 @@ public class EmployeePatchRequestDTO {
     private String phone;
     private LocalDate joinDate;
     private Employee.Status status;
+    private Integer department;
 
     public boolean isEmpty() {
 
-        return firstName == null &&
-                lastName == null &&
-                email == null &&
-                phone == null &&
-                joinDate == null &&
-                status == null;
+        return firstName == null && lastName == null && email == null && phone == null && joinDate == null
+                && status == null && department == null;
 
     }
 
