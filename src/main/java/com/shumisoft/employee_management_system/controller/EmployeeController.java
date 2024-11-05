@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shumisoft.employee_management_system.dto.request.EmployeePatchRequestDTO;
 import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
 import com.shumisoft.employee_management_system.service.impl.EmployeeServiceImpl;
 
 import jakarta.validation.Valid;
@@ -34,7 +35,8 @@ public class EmployeeController {
     private final EmployeeServiceImpl service;
 
     @PostMapping
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeRequestDTO dto) {
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> createEmployee(
+            @Valid @RequestBody EmployeeRequestDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createEmployee(dto));
 
@@ -42,22 +44,29 @@ public class EmployeeController {
 
     @GetMapping
     public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
+            @RequestParam(required = false) Integer departmentId,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        if (departmentId != null) {
+
+            return ResponseEntity.ok(service.getEmployeesByDepartmentId(departmentId, page, pageSize));
+
+        }
 
         return ResponseEntity.ok(service.getAllEmployees(page, pageSize));
 
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable UUID id) {
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> getEmployeeById(@PathVariable UUID id) {
 
         return ResponseEntity.ok(service.getEmployeeById(id));
 
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployeeById(@PathVariable UUID id,
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> updateEmployeeById(@PathVariable UUID id,
             @RequestBody EmployeeRequestDTO dto) {
 
         return ResponseEntity.ok(service.updateEmployeeById(id, dto));
@@ -65,7 +74,7 @@ public class EmployeeController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<EmployeeResponseDTO> patchEmployeeById(@PathVariable UUID id,
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> patchEmployeeById(@PathVariable UUID id,
             @RequestBody EmployeePatchRequestDTO dto) {
 
         return ResponseEntity.ok(service.patchEmployeeById(id, dto));
