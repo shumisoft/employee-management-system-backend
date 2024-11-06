@@ -1,8 +1,8 @@
 package com.shumisoft.employee_management_system.dto.request;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class DepartmentPatchRequestDTO {
 
     private String name;
