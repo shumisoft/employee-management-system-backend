@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorMessageDTO> dataIntegrityViolationExceptionHandler(DataIntegrityViolationException e) {
 
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ErrorMessageDTO.builder().message(e.getMessage()).build());
+                .body(ErrorMessageDTO.builder().message(e.getMostSpecificCause().getMessage()).build());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -71,6 +72,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorMessageDTO.builder().message(e.getMessage()).build());
+
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessageDTO> methodArgumentNotValidExceptionHandler(
+            MethodArgumentNotValidException e) {
+
+        return ResponseEntity.badRequest()
+                .body(ErrorMessageDTO.builder().message(e.getAllErrors().getFirst().getDefaultMessage()).build());
 
     }
 
