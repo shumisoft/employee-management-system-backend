@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 import com.shumisoft.employee_management_system.entity.Employee;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class EmployeePatchRequestDTO {
 
     private String firstName;
