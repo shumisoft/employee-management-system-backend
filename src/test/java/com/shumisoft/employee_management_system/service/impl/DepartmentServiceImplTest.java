@@ -33,7 +33,7 @@ class DepartmentServiceImplTest {
     private final DepartmentServiceImpl service = new DepartmentServiceImpl(repository);
 
     @Test
-    void createDepartment_savesAndReturnsDTO() {
+    void createDepartmentSavesAndReturnsDTO() {
 
         // arrange
         DepartmentRequestDTO req = new DepartmentRequestDTO();
@@ -66,7 +66,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void getAllDepartments_returnsMappedPage() {
+    void getAllDepartmentsReturnsMappedPage() {
 
         // arrange
         int page = 0, pageSize = 2;
@@ -105,7 +105,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void getDepartmentById_returnsDTO() {
+    void getDepartmentByIdReturnsDTO() {
 
         // arrange
         Department entity = Department.builder().id(1).name("Finance").description("Money & stuff").build();
@@ -123,7 +123,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void getDepartmentById_throwsExceptionWhenNotFound() {
+    void getDepartmentByIdThrowsExceptionWhenNotFound() {
 
         // arrange
         when(repository.findById(99)).thenReturn(Optional.empty());
@@ -134,7 +134,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void updateDepartmentById_updatesAndReturnsDTO() {
+    void updateDepartmentByIdUpdatesAndReturnsDTO() {
 
         // arrange
         Department existing = Department.builder().id(2).name("Old name").description("Old description").build();
@@ -161,7 +161,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void updateDepartmentById_throwsExceptionWhenNotFound() {
+    void updateDepartmentByIdThrowsExceptionWhenNotFound() {
 
         // arrange
         when(repository.findById(4)).thenReturn(Optional.empty());
@@ -177,7 +177,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void patchDepartmentById_updatesPartialFields() {
+    void patchDepartmentByIdUpdatesPartialFields() {
 
         // arrange
         Department existing = Department.builder().id(1).name("HR").description("People thingy").build();
@@ -223,7 +223,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void patchDepartmentById_throwsExceptionWhenEmptyPatch() {
+    void patchDepartmentByIdThrowsExceptionWhenEmptyPatch() {
 
         // arrange
         Department existing = Department.builder().id(1).name("Seomething").description("Something more").build();
@@ -238,7 +238,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void patchDepartmentById_throwsExceptionWhenNotFound() {
+    void patchDepartmentByIdThrowsExceptionWhenNotFound() {
 
         // arrange
         when(repository.findById(4)).thenReturn(Optional.empty());
@@ -253,7 +253,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void deleteDepartmentById_deletesSuccessfully() {
+    void deleteDepartmentByIdDeletesSuccessfully() {
 
         // arrange
         Department existing = Department.builder().id(1).name("IT").build();
@@ -267,7 +267,7 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void deleteDepartmentById_throwsWhenNotFound() {
+    void deleteDepartmentByIdThrowsWhenNotFound() {
 
         // arrange
         when(repository.findById(50)).thenReturn(Optional.empty());
