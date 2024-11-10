@@ -69,7 +69,8 @@ class DepartmentServiceImplTest {
     void getAllDepartmentsReturnsMappedPage() {
 
         // arrange
-        int page = 0, pageSize = 2;
+        int page = 0;
+        int pageSize = 2;
 
         Department dep1 = Department.builder().id(1).name("HR").description("Human Resources").build();
         Department dep2 = Department.builder().id(2).name("IT").description("Information Tech").build();
