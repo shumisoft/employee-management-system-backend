@@ -35,6 +35,8 @@ class EmployeeServiceImplTest {
     private final DepartmentRepository departmentRepository = Mockito.mock(DepartmentRepository.class);
     private final EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, departmentRepository);
 
+    private final String john = "john@example.com";
+
     @Test
     void createEmployeeSavesAndReturnsDTO() {
 
@@ -42,7 +44,7 @@ class EmployeeServiceImplTest {
         Department department = new Department(1, "HR", "desc");
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("John")
-                .email("john@example.com")
+                .email(john)
                 .department(1)
                 .build();
 
@@ -69,7 +71,7 @@ class EmployeeServiceImplTest {
         // arrange
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("John")
-                .email("john@example.com")
+                .email(john)
                 .department(99)
                 .build();
 
@@ -217,7 +219,7 @@ class EmployeeServiceImplTest {
                 .id(id)
                 .firstName("John")
                 .lastName("Doe")
-                .email("john@example.com")
+                .email(john)
                 .phone("123")
                 .joinDate(LocalDate.of(2020, 1, 1))
                 .status(Employee.Status.ACTIVE)
