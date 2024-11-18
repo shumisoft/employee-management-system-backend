@@ -15,6 +15,11 @@ public interface EmployeeService {
 
     public Page<EmployeeResponseDTO> getAllEmployees(Integer page, Integer pageSize);
 
+    public Page<EmployeeResponseDTO> getEmployeesByDepartmentId(Integer departmentId, Integer page,
+            Integer pageSize);
+
+    public Page<EmployeeResponseDTO> getSubordinatesByManagerId(UUID managerId, Integer page, Integer pageSize);
+
     public EmployeeResponseWithDepartmentDTO getEmployeeById(UUID id);
 
     public EmployeeResponseWithDepartmentDTO updateEmployeeById(UUID id, EmployeeRequestDTO dto);
