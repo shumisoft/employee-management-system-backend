@@ -14,4 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 
     Page<Employee> findByDepartmentId(Integer departmentId, Pageable pageable);
 
+    Page<Employee> findByManagerId(UUID managerId, Pageable pageable);
+
 }
