@@ -56,12 +56,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    @Override
     public Page<EmployeeResponseDTO> getEmployeesByDepartmentId(Integer departmentId, Integer page,
             Integer pageSize) {
 
         return employeeRepository.findByDepartmentId(departmentId, PageRequest.of(page, pageSize))
                 .map(EmployeeResponseDTO::fromEntity);
 
+    }
+
+    @Override
+    public Page<EmployeeResponseDTO> getSubordinatesByManagerId(UUID managerId, Integer page, Integer pageSize) {
+        return employeeRepository.findByManagerId(managerId, PageRequest.of(page, pageSize))
+                .map(EmployeeResponseDTO::fromEntity);
     }
 
     @Override
@@ -138,6 +145,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (dto.getDepartment() != null) {
 
             entity.setDepartment(findDepartmentByIdOrThrowException(dto.getDepartment()));
+
+        }
+
+        if (dto.getManager() != null) {
+
+            entity.setManager(findEmployeeByIdOrThrowException(dto.getManager()));
 
         }
 
