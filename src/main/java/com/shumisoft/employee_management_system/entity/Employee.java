@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +35,8 @@ public class Employee {
     private String email;
     private String phone;
     private LocalDate joinDate;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     // Enum for Status
@@ -47,5 +52,9 @@ public class Employee {
      * @JoinColumn(name = "emp_department_id") //custom column name
      */
     private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
 
 }
