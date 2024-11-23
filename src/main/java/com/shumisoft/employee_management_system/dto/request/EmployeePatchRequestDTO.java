@@ -1,6 +1,7 @@
 package com.shumisoft.employee_management_system.dto.request;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import com.shumisoft.employee_management_system.entity.Employee;
 
@@ -16,6 +17,7 @@ public class EmployeePatchRequestDTO {
     private LocalDate joinDate;
     private Employee.Status status;
     private Integer department;
+    private UUID manager;
 
     public boolean isEmpty() {
 
