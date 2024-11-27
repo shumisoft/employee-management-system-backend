@@ -58,6 +58,15 @@ public class EmployeeController {
 
     }
 
+    @GetMapping("{id}/subordinates")
+    public ResponseEntity<Page<EmployeeResponseDTO>> getSubordinatesByManagerId(
+            @PathVariable UUID id,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        return ResponseEntity.ok(service.getSubordinatesByManagerId(id, page, pageSize));
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<EmployeeResponseWithDepartmentDTO> getEmployeeById(@PathVariable UUID id) {
 
