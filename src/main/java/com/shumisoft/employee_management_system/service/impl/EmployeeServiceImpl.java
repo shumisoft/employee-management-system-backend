@@ -1,7 +1,5 @@
 package com.shumisoft.employee_management_system.service.impl;
 
-import java.util.UUID;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
 
-    private Employee findEmployeeByIdOrThrowException(UUID id) {
+    private Employee findEmployeeByIdOrThrowException(Integer id) {
 
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id: " + id));
@@ -66,20 +64,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeResponseDTO> getSubordinatesByManagerId(UUID managerId, Integer page, Integer pageSize) {
+    public Page<EmployeeResponseDTO> getSubordinatesByManagerId(Integer managerId, Integer page, Integer pageSize) {
         return employeeRepository.findByManagerId(managerId, PageRequest.of(page, pageSize))
                 .map(EmployeeResponseDTO::fromEntity);
     }
 
     @Override
-    public EmployeeResponseWithDepartmentDTO getEmployeeById(UUID id) {
+    public EmployeeResponseWithDepartmentDTO getEmployeeById(Integer id) {
 
         return EmployeeResponseWithDepartmentDTO.fromEntity(findEmployeeByIdOrThrowException(id));
 
     }
 
     @Override
-    public EmployeeResponseWithDepartmentDTO updateEmployeeById(UUID id, EmployeeRequestDTO dto) {
+    public EmployeeResponseWithDepartmentDTO updateEmployeeById(Integer id, EmployeeRequestDTO dto) {
 
         Employee entity = findEmployeeByIdOrThrowException(id);
 
@@ -96,7 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeResponseWithDepartmentDTO patchEmployeeById(UUID id, EmployeePatchRequestDTO dto) {
+    public EmployeeResponseWithDepartmentDTO patchEmployeeById(Integer id, EmployeePatchRequestDTO dto) {
 
         Employee entity = findEmployeeByIdOrThrowException(id);
 
@@ -158,7 +156,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployeeById(UUID id) {
+    public void deleteEmployeeById(Integer id) {
 
         employeeRepository.delete(findEmployeeByIdOrThrowException(id));
 

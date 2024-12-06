@@ -1,7 +1,5 @@
 package com.shumisoft.employee_management_system.controller;
 
-import java.util.UUID;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +58,7 @@ public class EmployeeController {
 
     @GetMapping("{id}/subordinates")
     public ResponseEntity<Page<EmployeeResponseDTO>> getSubordinatesByManagerId(
-            @PathVariable UUID id,
+            @PathVariable Integer id,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer pageSize) {
 
@@ -68,14 +66,14 @@ public class EmployeeController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<EmployeeResponseWithDepartmentDTO> getEmployeeById(@PathVariable UUID id) {
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> getEmployeeById(@PathVariable Integer id) {
 
         return ResponseEntity.ok(service.getEmployeeById(id));
 
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<EmployeeResponseWithDepartmentDTO> updateEmployeeById(@PathVariable UUID id,
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> updateEmployeeById(@PathVariable Integer id,
             @RequestBody EmployeeRequestDTO dto) {
 
         return ResponseEntity.ok(service.updateEmployeeById(id, dto));
@@ -83,7 +81,7 @@ public class EmployeeController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<EmployeeResponseWithDepartmentDTO> patchEmployeeById(@PathVariable UUID id,
+    public ResponseEntity<EmployeeResponseWithDepartmentDTO> patchEmployeeById(@PathVariable Integer id,
             @RequestBody EmployeePatchRequestDTO dto) {
 
         return ResponseEntity.ok(service.patchEmployeeById(id, dto));
@@ -91,7 +89,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteEmployeeById(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteEmployeeById(@PathVariable Integer id) {
 
         service.deleteEmployeeById(id);
 

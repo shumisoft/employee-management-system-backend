@@ -1,7 +1,6 @@
 package com.shumisoft.employee_management_system.dto.request;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import com.shumisoft.employee_management_system.entity.Employee;
 
@@ -32,7 +31,7 @@ public class EmployeeRequestDTO {
      */
     private Integer department;
 
-    private UUID manager;
+    private Integer manager;
 
     public Employee toEntity() {
 

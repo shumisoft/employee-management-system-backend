@@ -1,7 +1,6 @@
 package com.shumisoft.employee_management_system.entity;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +24,7 @@ public class Employee {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    private Integer id;
 
     @Column(nullable = false)
     private String firstName;

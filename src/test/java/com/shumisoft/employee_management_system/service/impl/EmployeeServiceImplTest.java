@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -49,7 +48,7 @@ class EmployeeServiceImplTest {
                 .build();
 
         Employee savedEntity = dto.toEntity();
-        savedEntity.setId(UUID.randomUUID());
+        savedEntity.setId(1);
         savedEntity.setDepartment(department);
 
         when(departmentRepository.findById(1)).thenReturn(Optional.of(department));
@@ -86,7 +85,7 @@ class EmployeeServiceImplTest {
     void getAllEmployeesReturnsPageOfDTOs() {
 
         // arrange
-        Employee e = Employee.builder().id(UUID.randomUUID()).firstName("Alice").email("a@b.com").build();
+        Employee e = Employee.builder().id(1).firstName("Alice").email("a@b.com").build();
         when(employeeRepository.findAll(PageRequest.of(0, 10))).thenReturn(new PageImpl<>(List.of(e)));
 
         // act
@@ -102,7 +101,7 @@ class EmployeeServiceImplTest {
     void getEmployeesByDepartmentIdReturnsEmployees() {
 
         // arrange
-        Employee e = Employee.builder().id(UUID.randomUUID()).firstName("Bob").email("b@c.com").build();
+        Employee e = Employee.builder().id(1).firstName("Bob").email("b@c.com").build();
         when(employeeRepository.findByDepartmentId(1, PageRequest.of(0, 5))).thenReturn(new PageImpl<>(List.of(e)));
 
         // act
@@ -118,7 +117,7 @@ class EmployeeServiceImplTest {
     void getEmployeeByIdReturnsDTO() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Employee e = Employee.builder().id(id).firstName("Charlie").email("c@d.com").build();
 
         when(employeeRepository.findById(id)).thenReturn(Optional.of(e));
@@ -135,7 +134,7 @@ class EmployeeServiceImplTest {
     void getEmployeeByIdNotFoundThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
         // assert
@@ -147,7 +146,7 @@ class EmployeeServiceImplTest {
     void updateEmployeeByIdUpdatesAndReturnsDTO() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Department department = new Department(1, "IT", "info");
         Employee existing = Employee.builder().id(id).firstName("Old").email("old@x.com").build();
 
@@ -174,7 +173,7 @@ class EmployeeServiceImplTest {
     void updateEmployeeByIdEmployeeNotFoundThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("X")
                 .email("x@y.com")
@@ -192,7 +191,7 @@ class EmployeeServiceImplTest {
     void updateEmployeeByIdDepartmentNotFoundThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Employee existing = Employee.builder().id(id).firstName("Old").email("old@x.com").build();
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("New")
@@ -212,7 +211,7 @@ class EmployeeServiceImplTest {
     void patchEmployeeByIdUpdatesPartialFields() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Department dept = Department.builder().id(1).name("HR").description("Human Resources").build();
 
         Employee existing = Employee.builder()
@@ -317,7 +316,7 @@ class EmployeeServiceImplTest {
     void patchEmployeeByIdEmptyPatchThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Employee existing = Employee.builder().id(id).firstName("Old").build();
         EmployeePatchRequestDTO dto = new EmployeePatchRequestDTO();
 
@@ -332,7 +331,7 @@ class EmployeeServiceImplTest {
     void patchEmployeeByIdEmployeeNotFoundThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         EmployeePatchRequestDTO dto = new EmployeePatchRequestDTO();
         dto.setFirstName("X");
 
@@ -347,7 +346,7 @@ class EmployeeServiceImplTest {
     void patchEmployeeByIdDepartmentNotFoundThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Employee existing = Employee.builder().id(id).firstName("Old").build();
         EmployeePatchRequestDTO dto = new EmployeePatchRequestDTO();
         dto.setDepartment(99);
@@ -364,7 +363,7 @@ class EmployeeServiceImplTest {
     void deleteEmployeeByIdDeletesSuccessfully() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         Employee e = Employee.builder().id(id).firstName("Del").build();
 
         when(employeeRepository.findById(id)).thenReturn(Optional.of(e));
@@ -381,7 +380,7 @@ class EmployeeServiceImplTest {
     void deleteEmployeeByIdNotFoundThrowsException() {
 
         // arrange
-        UUID id = UUID.randomUUID();
+        Integer id = 1;
         when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
         // assert

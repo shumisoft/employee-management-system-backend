@@ -1,7 +1,6 @@
 package com.shumisoft.employee_management_system.dto.response;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import com.shumisoft.employee_management_system.entity.Employee;
 
@@ -12,7 +11,7 @@ import lombok.Getter;
 @Builder
 public class EmployeeResponseDTO {
 
-    private UUID id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;

@@ -1,7 +1,5 @@
 package com.shumisoft.employee_management_system.service;
 
-import java.util.UUID;
-
 import org.springframework.data.domain.Page;
 
 import com.shumisoft.employee_management_system.dto.request.EmployeePatchRequestDTO;
@@ -18,14 +16,14 @@ public interface EmployeeService {
     public Page<EmployeeResponseDTO> getEmployeesByDepartmentId(Integer departmentId, Integer page,
             Integer pageSize);
 
-    public Page<EmployeeResponseDTO> getSubordinatesByManagerId(UUID managerId, Integer page, Integer pageSize);
+    public Page<EmployeeResponseDTO> getSubordinatesByManagerId(Integer managerId, Integer page, Integer pageSize);
 
-    public EmployeeResponseWithDepartmentDTO getEmployeeById(UUID id);
+    public EmployeeResponseWithDepartmentDTO getEmployeeById(Integer id);
 
-    public EmployeeResponseWithDepartmentDTO updateEmployeeById(UUID id, EmployeeRequestDTO dto);
+    public EmployeeResponseWithDepartmentDTO updateEmployeeById(Integer id, EmployeeRequestDTO dto);
 
-    public EmployeeResponseWithDepartmentDTO patchEmployeeById(UUID id, EmployeePatchRequestDTO dto);
+    public EmployeeResponseWithDepartmentDTO patchEmployeeById(Integer id, EmployeePatchRequestDTO dto);
 
-    public void deleteEmployeeById(UUID id);
+    public void deleteEmployeeById(Integer id);
 
 }
