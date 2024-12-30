@@ -17,3 +17,7 @@ logging:
         org:
             springframework:
                 security: TRACE
+jwt:
+    secret: ${JWT_SECRET}
+    expiry-ms: ${JWT_EXPIRY_MS}
+    refresh-expiry-ms: ${JWT_REFRESH_EXPIRY_MS}
