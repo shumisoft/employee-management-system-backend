@@ -4,6 +4,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.shumisoft.employee_management_system.dto.common.ErrorMessageDTO;
+import com.shumisoft.employee_management_system.exception.InvalidTokenException;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -81,6 +83,22 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest()
                 .body(ErrorMessageDTO.builder().message(e.getAllErrors().getFirst().getDefaultMessage()).build());
+
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorMessageDTO> invalidTokenExceptionHandler(InvalidTokenException e) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorMessageDTO.builder().message(e.getMessage()).build());
+
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorMessageDTO> authorizationDeniedExceptionHandler(AuthorizationDeniedException e) {
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ErrorMessageDTO.builder().message("Acess Denied").build());
 
     }
 
