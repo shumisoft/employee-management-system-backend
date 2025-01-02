@@ -2,8 +2,6 @@ package com.shumisoft.employee_management_system.config;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -11,10 +9,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class IPLoggerFilter extends OncePerRequestFilter {
-
-        private static final Logger ipLogger = LoggerFactory.getLogger(IPLoggerFilter.class);
 
         @Override
         protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -24,7 +22,7 @@ public class IPLoggerFilter extends OncePerRequestFilter {
                 String userAgent = request.getHeader("User-Agent");
                 userAgent = (userAgent != null) ? userAgent : "Unknown User-Agent";
 
-                ipLogger.info(
+                log.info(
                                 """
                                                 Request Audit:
                                                         method       : {}
