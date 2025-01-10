@@ -12,11 +12,6 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
-logging:
-    level:
-        org:
-            springframework:
-                security: TRACE
 jwt:
     secret: ${JWT_SECRET}
     expiry-ms: ${JWT_EXPIRY_MS}
