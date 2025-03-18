@@ -24,10 +24,11 @@ import com.shumisoft.employee_management_system.dto.request.DepartmentRequestDTO
 import com.shumisoft.employee_management_system.dto.response.DepartmentResponseDTO;
 import com.shumisoft.employee_management_system.entity.Department;
 import com.shumisoft.employee_management_system.repository.DepartmentRepository;
+import com.shumisoft.employee_management_system.service.AbstractIntegrationTest;
 
 import jakarta.persistence.EntityNotFoundException;
 
-class DepartmentServiceImplTest {
+class DepartmentServiceImplTest extends AbstractIntegrationTest {
 
     private final DepartmentRepository repository = Mockito.mock(DepartmentRepository.class);
     private final DepartmentServiceImpl service = new DepartmentServiceImpl(repository);

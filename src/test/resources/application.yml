@@ -1,0 +1,13 @@
+server:
+    port: 1337
+spring:
+    application:
+        name: employee-management-system
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+jwt:
+    secret: owuoprquoweuropquwoueroquwsadfasdfasdfasxdfasdfsdfasdffffffffffffffffffffffffffffff
+    expiry-ms: 38503804958039
+    refresh-expiry-ms: 38503804958039

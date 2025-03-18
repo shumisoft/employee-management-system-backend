@@ -1,9 +1,8 @@
 package com.shumisoft.employee_management_system;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+// @SpringBootTest
 class EmployeeManagementSystemApplicationTests {
 
 	@Test

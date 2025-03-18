@@ -16,8 +16,10 @@ import com.shumisoft.employee_management_system.dto.common.ErrorMessageDTO;
 import com.shumisoft.employee_management_system.exception.InvalidTokenException;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -104,6 +106,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessageDTO> defaultHandler(Exception e) {
+        log.warn(e.getMessage() + e.getStackTrace());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorMessageDTO.builder().message(e.getMessage()).build());
     }

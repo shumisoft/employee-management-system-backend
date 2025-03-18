@@ -1,0 +1,19 @@
+{
+    "properties": [
+        {
+            "name": "jwt.secret",
+            "type": "java.lang.String",
+            "description": "Secret phrase for JWT"
+        },
+        {
+            "name": "jwt.expiry-ms",
+            "type": "java.lang.Long",
+            "description": "Expiry time for JWT access token in ms"
+        },
+        {
+            "name": "jwt.refresh-expiry-ms",
+            "type": "java.lang.Long",
+            "description": "Expiry time for JWT refresh token in ms"
+        }
+    ]
+}
