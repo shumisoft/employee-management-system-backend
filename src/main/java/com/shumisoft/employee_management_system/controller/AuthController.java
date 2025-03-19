@@ -48,7 +48,6 @@ public class AuthController {
 
     @PostMapping("change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePassowordRequestDTO dto) {
-        // TODO
         return ResponseEntity.ok("change-password endpoint working: " + dto);
 
     }

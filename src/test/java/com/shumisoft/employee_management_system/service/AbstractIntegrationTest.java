@@ -7,7 +7,7 @@ import org.testcontainers.junit.jupiter.Container;
 
 public abstract class AbstractIntegrationTest {
     @Container
-    private static PostgreSQLContainer postgresql = new PostgreSQLContainer<>("postgres");
+    private static PostgreSQLContainer<?> postgresql = new PostgreSQLContainer<>("postgres");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
