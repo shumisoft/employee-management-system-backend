@@ -14,4 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     Page<Employee> findByManagerId(Integer managerId, Pageable pageable);
 
+    boolean existsByEmail(String email);
+
 }
