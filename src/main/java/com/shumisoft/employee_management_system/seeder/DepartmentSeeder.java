@@ -73,5 +73,8 @@ public class DepartmentSeeder implements ApplicationRunner {
             log.info("[Seeder] Departments already exist. Skipping sample department seeding.");
 
         }
+
+
+        log.info("[Seeder] DepartmentSeeder seeder finished");
     }
 }
