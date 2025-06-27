@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shumisoft.employee_management_system.dto.request.EmployeePatchRequestDTO;
 import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeOrgChartResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
 import com.shumisoft.employee_management_system.service.impl.EmployeeServiceImpl;
@@ -63,6 +64,15 @@ public class EmployeeController {
             @RequestParam(defaultValue = "10") Integer pageSize) {
 
         return ResponseEntity.ok(service.getSubordinatesByManagerId(id, page, pageSize));
+    }
+
+    @GetMapping("{id}/org-chart")
+    public ResponseEntity<EmployeeOrgChartResponseDTO> getEmployeeOrgChart(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        return ResponseEntity.ok(
+                service.getEmployeeOrgChart(id, page, pageSize));
     }
 
     @GetMapping("{id}")

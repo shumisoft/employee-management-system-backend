@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.shumisoft.employee_management_system.dto.request.EmployeePatchRequestDTO;
 import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeOrgChartResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
 import com.shumisoft.employee_management_system.entity.Department;
@@ -67,6 +68,33 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<EmployeeResponseDTO> getSubordinatesByManagerId(Integer managerId, Integer page, Integer pageSize) {
         return employeeRepository.findByManagerId(managerId, PageRequest.of(page, pageSize))
                 .map(EmployeeResponseDTO::fromEntity);
+    }
+
+    @Override
+    public EmployeeOrgChartResponseDTO getEmployeeOrgChart(Integer employeeId, Integer page, Integer pageSize) {
+
+        Employee employee = findEmployeeByIdOrThrowException(employeeId);
+
+        // Manager (may be null)
+        EmployeeResponseDTO managerDto = null;
+        if (employee.getManager() != null) {
+            managerDto = EmployeeResponseDTO.fromEntity(employee.getManager());
+        }
+
+        // Employee
+        EmployeeResponseWithDepartmentDTO employeeDto = EmployeeResponseWithDepartmentDTO.fromEntity(employee);
+
+        // Subordinates (paginated)
+        Page<EmployeeResponseDTO> subordinates = employeeRepository
+                .findByManagerId(employeeId, PageRequest.of(page, pageSize))
+                .map(EmployeeResponseDTO::fromEntity);
+
+        return EmployeeOrgChartResponseDTO.builder()
+                .manager(managerDto)
+                .employee(employeeDto)
+                .subordinates(subordinates)
+                .build();
+
     }
 
     @Override

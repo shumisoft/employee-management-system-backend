@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 
 import com.shumisoft.employee_management_system.dto.request.EmployeePatchRequestDTO;
 import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeOrgChartResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
 
@@ -17,6 +18,8 @@ public interface EmployeeService {
             Integer pageSize);
 
     public Page<EmployeeResponseDTO> getSubordinatesByManagerId(Integer managerId, Integer page, Integer pageSize);
+
+    public EmployeeOrgChartResponseDTO getEmployeeOrgChart(Integer employeeId, Integer page, Integer pageSize);
 
     public EmployeeResponseWithDepartmentDTO getEmployeeById(Integer id);
 
