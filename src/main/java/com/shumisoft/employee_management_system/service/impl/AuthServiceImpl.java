@@ -100,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!encoder.matches(dto.getOldPassword(), entity.getPasswordHash())) {
 
-            throw new BadCredentialsException("Invalid password.");
+            throw new BadCredentialsException("Wrong password");
         }
 
         entity.setPasswordHash(encoder.encode(dto.getNewPassword()));
