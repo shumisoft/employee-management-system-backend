@@ -7,6 +7,7 @@ import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeOrgChartResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeStatusCountResponseDTO;
 
 public interface EmployeeService {
 
@@ -26,6 +27,8 @@ public interface EmployeeService {
     public EmployeeResponseWithDepartmentDTO updateEmployeeById(Integer id, EmployeeRequestDTO dto);
 
     public EmployeeResponseWithDepartmentDTO patchEmployeeById(Integer id, EmployeePatchRequestDTO dto);
+
+    public EmployeeStatusCountResponseDTO getEmployeeStatusCount();
 
     public void deleteEmployeeById(Integer id);
 

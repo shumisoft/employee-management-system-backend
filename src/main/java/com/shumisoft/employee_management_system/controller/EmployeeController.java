@@ -20,6 +20,7 @@ import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeOrgChartResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeStatusCountResponseDTO;
 import com.shumisoft.employee_management_system.service.impl.EmployeeServiceImpl;
 
 import jakarta.validation.Valid;
@@ -95,6 +96,13 @@ public class EmployeeController {
             @RequestBody EmployeePatchRequestDTO dto) {
 
         return ResponseEntity.ok(service.patchEmployeeById(id, dto));
+
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<EmployeeStatusCountResponseDTO> getEmployeeStatusCount() {
+
+        return ResponseEntity.ok(service.getEmployeeStatusCount());
 
     }
 

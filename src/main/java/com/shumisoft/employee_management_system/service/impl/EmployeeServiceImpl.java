@@ -9,6 +9,7 @@ import com.shumisoft.employee_management_system.dto.request.EmployeeRequestDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeOrgChartResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseDTO;
 import com.shumisoft.employee_management_system.dto.response.EmployeeResponseWithDepartmentDTO;
+import com.shumisoft.employee_management_system.dto.response.EmployeeStatusCountResponseDTO;
 import com.shumisoft.employee_management_system.entity.Department;
 import com.shumisoft.employee_management_system.entity.Employee;
 import com.shumisoft.employee_management_system.repository.DepartmentRepository;
@@ -187,6 +188,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployeeById(Integer id) {
 
         employeeRepository.delete(findEmployeeByIdOrThrowException(id));
+
+    }
+
+    @Override
+    public EmployeeStatusCountResponseDTO getEmployeeStatusCount() {
+
+        long active = employeeRepository.countByStatus(Employee.Status.ACTIVE);
+        long inactive = employeeRepository.countByStatus(Employee.Status.INACTIVE);
+
+        return EmployeeStatusCountResponseDTO.builder().active(active).inactive(inactive).build();
 
     }
 }
