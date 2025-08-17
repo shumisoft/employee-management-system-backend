@@ -15,7 +15,7 @@ public class IPLoggerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        System.out.println("remote address: " + request.getRemoteAddr());
+        System.out.println("Remote address: " + request.getRemoteAddr());
         filterChain.doFilter(request, response);
     }
 
