@@ -1,4 +1,4 @@
-package com.shumisoft.employee_management_system.service.impl;
+package com.shumisoft.employee_management_system.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -13,8 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,14 +27,22 @@ import com.shumisoft.employee_management_system.dto.request.DepartmentRequestDTO
 import com.shumisoft.employee_management_system.dto.response.DepartmentResponseDTO;
 import com.shumisoft.employee_management_system.entity.Department;
 import com.shumisoft.employee_management_system.repository.DepartmentRepository;
-import com.shumisoft.employee_management_system.service.AbstractIntegrationTest;
+import com.shumisoft.employee_management_system.service.impl.DepartmentServiceImpl;
 
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;// 1. Add the Mockito Extension for JUnit 5
 
-class DepartmentServiceImplTest extends AbstractIntegrationTest {
+@ExtendWith(MockitoExtension.class)
+// 2. Remove "extends AbstractIntegrationTest"
+class DepartmentServiceImplTest {
 
-    private final DepartmentRepository repository = Mockito.mock(DepartmentRepository.class);
-    private final DepartmentServiceImpl service = new DepartmentServiceImpl(repository);
+    // 3. Use @Mock instead of Mockito.mock()
+    @Mock
+    private DepartmentRepository repository;
+
+    // 4. Use @InjectMocks to automatically inject the mocked repository into the
+    // service
+    @InjectMocks
+    private DepartmentServiceImpl service;
 
     @Test
     void createDepartmentSavesAndReturnsDTO() {

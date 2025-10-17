@@ -1,5 +1,6 @@
-package com.shumisoft.employee_management_system.service.impl;
+package com.shumisoft.employee_management_system.unit.service;
 
+import static com.shumisoft.employee_management_system.base.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,8 +12,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,34 +30,47 @@ import com.shumisoft.employee_management_system.entity.Department;
 import com.shumisoft.employee_management_system.entity.Employee;
 import com.shumisoft.employee_management_system.repository.DepartmentRepository;
 import com.shumisoft.employee_management_system.repository.EmployeeRepository;
-import com.shumisoft.employee_management_system.service.AbstractIntegrationTest;
+import com.shumisoft.employee_management_system.service.impl.EmployeeServiceImpl;
 
 import jakarta.persistence.EntityNotFoundException;
 
-class EmployeeServiceImplTest extends AbstractIntegrationTest {
+@ExtendWith(MockitoExtension.class)
+class EmployeeServiceImplTest {
+    @Mock
+    private EmployeeRepository employeeRepository;;
 
-    private final EmployeeRepository employeeRepository = Mockito.mock(EmployeeRepository.class);
-    private final DepartmentRepository departmentRepository = Mockito.mock(DepartmentRepository.class);
-    private final EmployeeServiceImpl service = new EmployeeServiceImpl(employeeRepository, departmentRepository);
+    @Mock
+    private DepartmentRepository departmentRepository;
 
-    private static final String JOHN_EMAIL = "john@example.com";
+    @InjectMocks
+    private EmployeeServiceImpl service;
+
+    // shared test data — built fresh before each test
+    private Department hrDept;
+    private Department itDept;
+    private Employee existing;
+
+    @BeforeEach
+    void setUp() {
+        hrDept = hrDepartment();
+        itDept = itDepartment();
+        existing = defaultEmployee(hrDept);
+    }
 
     @Test
     void createEmployeeSavesAndReturnsDTO() {
-
         // arrange
-        Department department = new Department(1, "HR", "desc");
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("John")
                 .email(JOHN_EMAIL)
-                .department(1)
+                .department(EXISTING_ID)
                 .build();
 
         Employee savedEntity = dto.toEntity();
-        savedEntity.setId(1);
-        savedEntity.setDepartment(department);
+        savedEntity.setId(EXISTING_ID);
+        savedEntity.setDepartment(hrDept);
 
-        when(departmentRepository.findById(1)).thenReturn(Optional.of(department));
+        when(departmentRepository.findById(EXISTING_ID)).thenReturn(Optional.of(hrDept));
         when(employeeRepository.save(any(Employee.class))).thenReturn(savedEntity);
 
         // act
@@ -61,151 +79,125 @@ class EmployeeServiceImplTest extends AbstractIntegrationTest {
         // assert
         assertNotNull(result.getId());
         assertEquals("John", result.getFirstName());
-        assertEquals(department, result.getDepartment());
-
+        assertEquals(hrDept, result.getDepartment());
     }
 
     @Test
     void createEmployeeDepartmentNotFoundThrowsException() {
-
         // arrange
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("John")
                 .email(JOHN_EMAIL)
-                .department(99)
+                .department(NOT_FOUND_ID)
                 .build();
 
-        when(departmentRepository.findById(99)).thenReturn(Optional.empty());
+        when(departmentRepository.findById(NOT_FOUND_ID)).thenReturn(Optional.empty());
 
         // assert
         assertThrows(EntityNotFoundException.class, () -> service.createEmployee(dto));
-
     }
+
+    // -------------------------------------------------------------------------
+    // READ
+    // -------------------------------------------------------------------------
 
     @Test
     void getAllEmployeesReturnsPageOfDTOs() {
-
         // arrange
-        Employee e = Employee.builder().id(1).firstName("Alice").email("a@b.com").build();
-        when(employeeRepository.findAll(PageRequest.of(0, 10))).thenReturn(new PageImpl<>(List.of(e)));
+        when(employeeRepository.findAll(PageRequest.of(0, 10)))
+                .thenReturn(new PageImpl<>(List.of(existing)));
 
         // act
         Page<EmployeeResponseDTO> result = service.getAllEmployees(0, 10);
 
         // assert
         assertEquals(1, result.getTotalElements());
-        assertEquals("Alice", result.getContent().get(0).getFirstName());
-
+        assertEquals("John", result.getContent().get(0).getFirstName());
     }
 
     @Test
     void getEmployeesByDepartmentIdReturnsEmployees() {
-
         // arrange
-        Employee e = Employee.builder().id(1).firstName("Bob").email("b@c.com").build();
-        when(employeeRepository.findByDepartmentId(1, PageRequest.of(0, 5))).thenReturn(new PageImpl<>(List.of(e)));
+        when(employeeRepository.findByDepartmentId(EXISTING_ID, PageRequest.of(0, 5)))
+                .thenReturn(new PageImpl<>(List.of(existing)));
 
         // act
-        Page<EmployeeResponseDTO> result = service.getEmployeesByDepartmentId(1, 0, 5);
+        Page<EmployeeResponseDTO> result = service.getEmployeesByDepartmentId(EXISTING_ID, 0, 5);
 
         // assert
         assertEquals(1, result.getTotalElements());
-        assertEquals("Bob", result.getContent().get(0).getFirstName());
-
+        assertEquals("John", result.getContent().get(0).getFirstName());
     }
 
     @Test
     void getEmployeeByIdReturnsDTO() {
-
         // arrange
-        Integer id = 1;
-        Employee e = Employee.builder().id(id).firstName("Charlie").email("c@d.com").build();
-
-        when(employeeRepository.findById(id)).thenReturn(Optional.of(e));
+        when(employeeRepository.findById(EXISTING_ID)).thenReturn(Optional.of(existing));
 
         // act
-        EmployeeResponseWithDepartmentDTO result = service.getEmployeeById(id);
+        EmployeeResponseWithDepartmentDTO result = service.getEmployeeById(EXISTING_ID);
 
         // assert
-        assertEquals("Charlie", result.getFirstName());
-
+        assertEquals("John", result.getFirstName());
     }
 
     @Test
     void getEmployeeByIdNotFoundThrowsException() {
-
         // arrange
-        Integer id = 1;
-        when(employeeRepository.findById(id)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(NOT_FOUND_ID)).thenReturn(Optional.empty());
 
         // assert
-        assertThrows(EntityNotFoundException.class, () -> service.getEmployeeById(id));
-
+        assertThrows(EntityNotFoundException.class, () -> service.getEmployeeById(NOT_FOUND_ID));
     }
+
+    // -------------------------------------------------------------------------
+    // UPDATE
+    // -------------------------------------------------------------------------
 
     @Test
     void updateEmployeeByIdUpdatesAndReturnsDTO() {
-
         // arrange
-        Integer id = 1;
-        Department department = new Department(1, "IT", "info");
-        Employee existing = Employee.builder().id(id).firstName("Old").email("old@x.com").build();
-
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
                 .firstName("New")
                 .email("new@x.com")
-                .department(1)
+                .department(EXISTING_ID)
                 .build();
 
-        when(employeeRepository.findById(id)).thenReturn(Optional.of(existing));
-        when(departmentRepository.findById(1)).thenReturn(Optional.of(department));
-        when(employeeRepository.save(any(Employee.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(employeeRepository.findById(EXISTING_ID)).thenReturn(Optional.of(existing));
+        when(departmentRepository.findById(EXISTING_ID)).thenReturn(Optional.of(hrDept));
+        when(employeeRepository.save(any(Employee.class))).thenAnswer(inv -> inv.getArgument(0));
 
         // act
-        EmployeeResponseWithDepartmentDTO result = service.updateEmployeeById(id, dto);
+        EmployeeResponseWithDepartmentDTO result = service.updateEmployeeById(EXISTING_ID, dto);
 
         // assert
         assertEquals("New", result.getFirstName());
-        assertEquals(department, result.getDepartment());
-
+        assertEquals(hrDept, result.getDepartment());
     }
 
     @Test
     void updateEmployeeByIdEmployeeNotFoundThrowsException() {
-
         // arrange
-        Integer id = 1;
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
-                .firstName("X")
-                .email("x@y.com")
-                .department(1)
-                .build();
+                .firstName("X").email("x@y.com").department(EXISTING_ID).build();
 
-        when(employeeRepository.findById(id)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(EXISTING_ID)).thenReturn(Optional.empty());
 
         // assert
-        assertThrows(EntityNotFoundException.class, () -> service.updateEmployeeById(id, dto));
-
+        assertThrows(EntityNotFoundException.class, () -> service.updateEmployeeById(EXISTING_ID, dto));
     }
 
     @Test
     void updateEmployeeByIdDepartmentNotFoundThrowsException() {
-
         // arrange
-        Integer id = 1;
-        Employee existing = Employee.builder().id(id).firstName("Old").email("old@x.com").build();
         EmployeeRequestDTO dto = EmployeeRequestDTO.builder()
-                .firstName("New")
-                .email("new@x.com")
-                .department(99)
-                .build();
+                .firstName("New").email("new@x.com").department(NOT_FOUND_ID).build();
 
-        when(employeeRepository.findById(id)).thenReturn(Optional.of(existing));
-        when(departmentRepository.findById(99)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(EXISTING_ID)).thenReturn(Optional.of(existing));
+        when(departmentRepository.findById(NOT_FOUND_ID)).thenReturn(Optional.empty());
 
         // assert
-        assertThrows(EntityNotFoundException.class, () -> service.updateEmployeeById(id, dto));
-
+        assertThrows(EntityNotFoundException.class, () -> service.updateEmployeeById(EXISTING_ID, dto));
     }
 
     @Test

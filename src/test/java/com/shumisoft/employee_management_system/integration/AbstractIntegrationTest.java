@@ -1,4 +1,4 @@
-package com.shumisoft.employee_management_system.service;
+package com.shumisoft.employee_management_system.integration;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
