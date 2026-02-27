@@ -1,0 +1,56 @@
+services:
+  # 1. THE SEEDER
+  config-helper:
+    image: alpine
+    volumes:
+      - ./nginx:/src:ro
+      - nginx_config:/dest
+    command: cp /src/nginx.conf /dest/nginx.conf
+
+  # 2. DATABASE
+  db:
+    image: postgres:15-alpine
+    networks:
+      - internal-net
+    environment:
+      # POSTGRES specific keys required for initialization
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-ems_db}
+
+  # 3. BACKEND (10 Replicas)
+  ems-be:
+    image: dipanshushukla/employee-management-system:latest-dev
+    deploy:
+      replicas: 10
+    networks:
+      - internal-net
+    depends_on:
+      - db
+    environment:
+      # Link these to the same values used in the 'db' service
+      DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-ems_db}
+      DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      DATASOURCE_PASSWORD: ${DB_PASSWORD:-password}
+      JWT_SECRET: ${JWT_SECRET_KEY:-some-hardcoded-very-unsafe-secret}
+      JWT_EXPIRY_MS: 10800000
+      JWT_REFRESH_EXPIRY_MS: 43200000
+      PORT: 1337
+
+  # 4. REVERSE PROXY
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      config-helper:
+        condition: service_completed_successfully
+    networks:
+      - internal-net
+    volumes:
+      - nginx_config:/etc/nginx:ro
+
+networks:
+  internal-net:
+    internal: true
+
+volumes:
+  nginx_config:
