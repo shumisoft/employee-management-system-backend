@@ -1,5 +1,5 @@
 services:
-  # 1. THE SEEDER
+  # 1. NGINX CONFIG SEEDER
   config-helper:
     image: alpine
     volumes:
@@ -10,6 +10,7 @@ services:
   # 2. DATABASE
   db:
     image: postgres:15-alpine
+    restart: unless-stopped
     networks:
       - internal-net
     environment:
@@ -18,11 +19,12 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
       POSTGRES_DB: ${DB_NAME:-ems_db}
 
-  # 3. BACKEND (10 Replicas)
+  # 3. BACKEND
   ems-be:
     image: dipanshushukla/employee-management-system:latest-dev
+    restart: unless-stopped
     deploy:
-      replicas: 10
+      replicas: 4
     networks:
       - internal-net
     depends_on:
@@ -37,20 +39,28 @@ services:
       JWT_REFRESH_EXPIRY_MS: 43200000
       PORT: 1337
 
-  # 4. REVERSE PROXY
+  # 4. NGINX REVERSE PROXY
   nginx:
     image: nginx:alpine
+    restart: unless-stopped
     depends_on:
       config-helper:
         condition: service_completed_successfully
     networks:
-      - internal-net
+      internal-net:
+      olympusconnect:
+        aliases:
+          - ems-be-nginx-proxy
+    
     volumes:
       - nginx_config:/etc/nginx:ro
 
 networks:
   internal-net:
     internal: true
+  olympusconnect:
+    external: true
+    name: OlympusConnect
 
 volumes:
   nginx_config:
