@@ -22,9 +22,16 @@ services:
   # 3. BACKEND
   ems-be:
     image: dipanshushukla/employee-management-system:latest-dev
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     restart: unless-stopped
     deploy:
       replicas: 4
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+        delay: 10s
     networks:
       - internal-net
     depends_on:
